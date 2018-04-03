@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc 
+	http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<!--Un datasource de una conexión a H2 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:db;DB_CLOSE_DELAY=-1" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.german.spring.hibernate"></property>
+<!-- 		<property name="annotatedClasses"> -->
+<!-- 			<list> -->
+<!-- 				<value>com.german.spring.hibernate</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">false</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- Sesión de Hibernate indicándole a Spring que será con la versión 5 -->
+	<!-- <bean id="sessionFactory" -->
+	<!-- class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"> -->
+	<!-- <property name="dataSource" ref="dataSource" /> -->
+	<!-- <property name="packagesToScan" value="com.german.spring.hibernate" 
+		/> -->
+	<!-- <property name="hibernateProperties"> -->
+	<!-- <props> -->
+	<!-- <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop> -->
+	<!-- <prop key="hibernate.show_sql">true</prop> -->
+	<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
+	<!-- </props> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+	<!--Se activan las transacciones y le indicamos a la aplicación de que tome 
+		el Bean transactionManager -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>
