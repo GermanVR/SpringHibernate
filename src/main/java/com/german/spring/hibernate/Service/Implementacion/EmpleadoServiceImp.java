@@ -2,44 +2,44 @@ package com.german.spring.hibernate.Service.Implementacion;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.german.spring.hibernate.Dao.IEmpleadoDao;
 import com.german.spring.hibernate.Service.IEmpleadoService;
 import com.german.spring.hibernate.entity.Empleado;
 
 @Service
-public class EmpleadoServiceImp implements IEmpleadoService<Empleado, Long> {
+public class EmpleadoServiceImp implements IEmpleadoService {
 
 	@Autowired
 	private IEmpleadoDao iEmpleadoDao;
 
-	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void create(Empleado entidad) {
 		iEmpleadoDao.create(entidad);
 	}
 
-	@Override
-	public Empleado obtieneEmpleado(Long id) {
+	@Transactional(isolation = Isolation.READ_UNCOMMITTED)
+	public Empleado obtieneEmpleado(long id) {
 		return iEmpleadoDao.read(id);
 	}
 
-	@Override
+	@Transactional(isolation = Isolation.READ_UNCOMMITTED)
 	public List<Empleado> readAll() {
 		return iEmpleadoDao.readAll();
 	}
 
-	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void update(Empleado entidad) {
 		iEmpleadoDao.update(entidad);
 	}
 
-	@Override
-	public void delete(Long id) {
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void delete(long id) {
 		iEmpleadoDao.delete(id);
 	}
 }

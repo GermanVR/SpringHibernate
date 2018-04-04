@@ -2,16 +2,18 @@ package com.german.spring.hibernate.Service;
 
 import java.util.List;
 
-public interface IEmpleadoService<T, ID> {
+import com.german.spring.hibernate.entity.Empleado;
 
-	public void create(T entidad);
+public interface IEmpleadoService {
 
-	public T obtieneEmpleado(ID id);
+	public void create(Empleado entidad);
 
-	public List<T> readAll();
+	public Empleado obtieneEmpleado(long id);
 
-	public void update(T entidad);
+	public List<Empleado> readAll();
 
-	public void delete(ID id);
+	public void update(Empleado entidad);
+
+	public void delete(long id);
 
 }
